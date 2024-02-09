@@ -1,0 +1,6 @@
+package com.example.fcalc
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
