@@ -17,11 +17,11 @@ class _CalculatorState extends State<Calculator> {
     '7',
     '8',
     '9',
-    '/',
+    '÷',
     '4',
     '5',
     '6',
-    '*',
+    'x',
     '1',
     '2',
     '3',
@@ -41,6 +41,7 @@ class _CalculatorState extends State<Calculator> {
             child: Text(
               buttonText,
               style: const TextStyle(
+                color: Colors.white60,
                 fontSize: 40.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -49,6 +50,50 @@ class _CalculatorState extends State<Calculator> {
         ),
       ],
     );
+  }
+
+  void handleCalculation(String buttonText) {
+    if (buttonText == 'C') {
+      setState(() {
+        _buffer.clear();
+        _output = "0";
+      });
+    } else if (buttonText == 'backspace') {
+      setState(() {
+        if (_buffer.isNotEmpty) {
+          _buffer.removeLast();
+        }
+        _output = _buffer.join();
+      });
+    } else if (buttonText == '=') {
+      String expression = _buffer.join();
+      // replace the 'x' symbol with '*'
+      expression = expression.replaceAll('x', '*');
+      // replace the '÷' symbol with '/'
+      expression = expression.replaceAll('÷', '/');
+      try {
+        final Parser p = Parser();
+        final Expression exp = p.parse(expression);
+        final ContextModel cm = ContextModel();
+        double eval = exp.evaluate(EvaluationType.REAL, cm);
+
+        setState(() {
+          // check if the result is an integer
+          _output = eval % 1 == 0 ? eval.toInt().toString() : eval.toString();
+          _buffer.clear();
+        });
+      } catch (e) {
+        setState(() {
+          _output = "Error";
+          _buffer.clear();
+        });
+      }
+    } else {
+      setState(() {
+        _buffer.add(buttonText);
+        _output = _buffer.join();
+      });
+    }
   }
 
   @override
@@ -70,7 +115,45 @@ class _CalculatorState extends State<Calculator> {
             ),
           ),
         ),
-        // Keyboard
+
+        Container(
+            color: Colors.black26,
+            height: 100,
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                SizedBox(
+                  width: 100,
+                  child: TextButton(
+                    onPressed: () {
+                      handleCalculation('C');
+                    },
+                    child: const Text(
+                      'C',
+                      style: TextStyle(
+                        color: Colors.redAccent,
+                        fontSize: 40.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 100,
+                  child: IconButton(
+                    onPressed: () {
+                      handleCalculation('backspace');
+                    },
+                    icon: const Icon(
+                      Icons.backspace,
+                      color: Colors.white60,
+                      size: 40.0,
+                    ),
+                  ),
+                )
+              ],
+            )),
 
         // Keyboard
         Expanded(
@@ -81,30 +164,7 @@ class _CalculatorState extends State<Calculator> {
                 .map((buttonText) => _buildButton(
                       buttonText,
                       onPressed: () {
-                        if (buttonText == '=') {
-                          final String expression = _buffer.join();
-                          try {
-                            final Parser p = Parser();
-                            final Expression exp = p.parse(expression);
-                            final ContextModel cm = ContextModel();
-                            final double eval =
-                                exp.evaluate(EvaluationType.REAL, cm);
-                            setState(() {
-                              _output = eval.toString();
-                              _buffer.clear();
-                            });
-                          } catch (e) {
-                            setState(() {
-                              _output = "Error";
-                              _buffer.clear();
-                            });
-                          }
-                        } else {
-                          setState(() {
-                            _buffer.add(buttonText);
-                            _output = _buffer.join();
-                          });
-                        }
+                        handleCalculation(buttonText);
                       },
                     ))
                 .toList(),

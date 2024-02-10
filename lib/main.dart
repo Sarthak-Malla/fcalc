@@ -12,9 +12,7 @@ class CalculatorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Fcalc: A Simple Calculator',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData.dark(),
       home: const CalculatorScreen(),
       debugShowCheckedModeBanner: false,
     );
@@ -32,9 +30,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Fcalc: A Simple Calculator'),
-      ),
+      appBar: AppBar(),
       body: const Calculator(),
     );
   }
