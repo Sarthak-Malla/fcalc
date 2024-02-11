@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
+import 'package:decimal/decimal.dart';
 
 class Calculator extends StatefulWidget {
   const Calculator({super.key});
@@ -69,7 +70,11 @@ class _CalculatorState extends State<Calculator> {
         if (_buffer.isNotEmpty) {
           _buffer.removeLast();
         }
-        _output = _buffer.join();
+        if (_buffer.isNotEmpty) {
+          _output = _buffer.join();
+        } else {
+          _output = "0";
+        }
       });
     } else if (buttonText == '=') {
       String expression = _buffer.join();
@@ -81,11 +86,14 @@ class _CalculatorState extends State<Calculator> {
         final Parser p = Parser();
         final Expression exp = p.parse(expression);
         final ContextModel cm = ContextModel();
-        double eval = exp.evaluate(EvaluationType.REAL, cm);
+        Decimal eval =
+            Decimal.parse(exp.evaluate(EvaluationType.REAL, cm).toString());
 
         setState(() {
           // check if the result is an integer
-          _output = eval % 1 == 0 ? eval.toInt().toString() : eval.toString();
+          _output = eval % Decimal.one == Decimal.zero
+              ? eval.toStringAsFixed(0)
+              : eval.toStringAsFixed(6);
           _buffer.clear();
 
           // TODO: Allow continuous calculations
