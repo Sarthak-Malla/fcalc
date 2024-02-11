@@ -36,14 +36,17 @@ class _CalculatorState extends State<Calculator> {
     return Row(
       children: <Widget>[
         Expanded(
-          child: TextButton(
-            onPressed: onPressed,
-            child: Text(
-              buttonText,
-              style: const TextStyle(
-                color: Colors.white60,
-                fontSize: 40.0,
-                fontWeight: FontWeight.bold,
+          child: Container(
+            margin: const EdgeInsets.all(8.0),
+            child: TextButton(
+              onPressed: onPressed,
+              child: Text(
+                buttonText,
+                style: const TextStyle(
+                  color: Colors.white60,
+                  fontSize: 40.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -102,15 +105,21 @@ class _CalculatorState extends State<Calculator> {
       children: <Widget>[
         // Display
         Expanded(
-          child: Container(
-            alignment: Alignment.bottomRight,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 24.0),
-            child: Text(
-              _output,
-              style: const TextStyle(
-                fontSize: 80.0,
-                fontWeight: FontWeight.bold,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              alignment: Alignment.bottomRight,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                // padding:
+                //     const EdgeInsets.symmetric(horizontal: 12.0, vertical: 24.0),
+                child: Text(
+                  _output,
+                  style: const TextStyle(
+                    fontSize: 80.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ),
