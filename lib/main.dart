@@ -31,6 +31,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
+      // has our calculator widget
       body: const Calculator(),
     );
   }
