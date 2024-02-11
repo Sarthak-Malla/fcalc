@@ -33,6 +33,9 @@ class _CalculatorState extends State<Calculator> {
   ];
 
   Widget _buildButton(String buttonText, {VoidCallback? onPressed}) {
+    Color buttonColor = buttonText == '='
+        ? const Color.fromARGB(237, 72, 132, 152)
+        : Colors.white60;
     return Row(
       children: <Widget>[
         Expanded(
@@ -42,8 +45,8 @@ class _CalculatorState extends State<Calculator> {
               onPressed: onPressed,
               child: Text(
                 buttonText,
-                style: const TextStyle(
-                  color: Colors.white60,
+                style: TextStyle(
+                  color: buttonColor,
                   fontSize: 40.0,
                   fontWeight: FontWeight.bold,
                 ),
@@ -84,6 +87,11 @@ class _CalculatorState extends State<Calculator> {
           // check if the result is an integer
           _output = eval % 1 == 0 ? eval.toInt().toString() : eval.toString();
           _buffer.clear();
+
+          // TODO: Allow continuous calculations
+          // add the result to the buffer
+          // this allows the user to continue with the calculation
+          // _buffer.add(_output);
         });
       } catch (e) {
         setState(() {
@@ -129,6 +137,7 @@ class _CalculatorState extends State<Calculator> {
             color: Colors.black26,
             height: 100,
             width: double.infinity,
+            padding: const EdgeInsetsDirectional.only(start: 8.0, end: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -157,7 +166,7 @@ class _CalculatorState extends State<Calculator> {
                     icon: const Icon(
                       Icons.backspace,
                       color: Colors.white60,
-                      size: 40.0,
+                      size: 30.0,
                     ),
                   ),
                 )
